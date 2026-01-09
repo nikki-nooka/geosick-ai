@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoSick - Environmental Health Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-primary-hover: #2563eb;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+            --card-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; }
+
+
+        /* Intro Animation styles */
+        @keyframes chaos-stream { from { transform: translateY(100vh) scale(0.5); opacity: 0; } 50% { opacity: 1; } to { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
+        @keyframes conductor-pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(96, 165, 250, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); } }
+        @keyframes earth-paint-reveal { from { mask-position: 100% 0; } to { mask-position: 0 0; } }
+        @keyframes slow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes cloud-drift { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes aegis-resonance { from { transform: scale(0.5); opacity: 0.7; border-width: 4px; } to { transform: scale(2.5); opacity: 0; border-width: 0px; } }
+        @keyframes brand-materialize { from { opacity: 0; text-shadow: 0 0 30px #fff; filter: blur(10px); transform: translateY(20px); } to { opacity: 1; text-shadow: 0 0 5px rgba(255,255,255,0.5); filter: blur(0); transform: translateY(0); } }
+        @keyframes simple-pulse { 0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; } 50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; } }
+        @keyframes rotate-globe-bg { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        /* Activity Chart Styles */
+        .bar-chart-container { display: flex; justify-content: space-between; align-items: flex-end; height: 120px; padding: 0 8px; }
+        .bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .bar-wrapper .bar { width: 75%; background-color: #dbeafe; border-radius: 4px; transition: background-color 0.2s ease, height 0.5s ease-out; cursor: pointer; }
+        .bar-wrapper:hover .bar { background-color: var(--accent-primary); }
+        .bar-wrapper .bar-label { font-size: 10px; color: var(--text-secondary); margin-top: 4px; }
+        .bar-tooltip { visibility: hidden; opacity: 0; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px); background-color: var(--text-primary); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; transition: opacity 0.2s, visibility 0.2s; }
+        .bar-wrapper:hover .bar-tooltip { visibility: visible; opacity: 1; }
+        
+        /* New Gradient Background */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #f0f9ff, #e0f2fe, #dbeafe, #eef2ff);
+            background-size: 400% 400%;
+            animation: gradient-animation 20s ease infinite;
+        }
+
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.8.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.47.10",
+    "three": "https://esm.sh/three@0.165.0",
+    "react-globe.gl": "https://esm.sh/react-globe.gl@2.27.1",
+    "three/addons/": "https://esm.sh/three@0.165.0/examples/jsm/",
+    "three/": "https://aistudiocdn.com/three@^0.180.0/"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
